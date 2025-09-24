@@ -100,6 +100,15 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.3s;
+        }
+        
+        .photo-item img.loading {
+            opacity: 0;
+        }
+        
+        .photo-item img.loaded {
+            opacity: 1;
         }
         
         .photo-number {
@@ -115,6 +124,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            z-index: 2;
         }
         
         .controls {
@@ -236,6 +246,22 @@
             background: #e0e0e0;
             color: #777;
             font-size: 24px;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #e91e63;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .completion-screen {
@@ -246,6 +272,14 @@
         .completion-screen h2 {
             color: #4caf50;
             margin-bottom: 20px;
+        }
+        
+        .loading-container {
+            display: none;
+            margin: 20px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 10px;
         }
         
         @media (max-width: 768px) {
@@ -311,13 +345,17 @@
                 </ul>
             </div>
             
+            <div class="loading-container" id="loading-container">
+                <p>Загрузка изображений... <span id="loaded-count">0</span>/3</p>
+            </div>
+            
             <div class="game-container" id="game-container">
                 <div class="photos-container" id="photos-container">
                     <!-- Фотографии будут добавлены через JavaScript -->
                 </div>
                 
                 <div class="controls">
-                    <button class="my_button" id="show-answer">Показать ответ</button>
+                    <button class="my_button" id="show-answer" disabled>Показать ответ</button>
                     <button class="secondary_button" id="next-question" disabled>Следующий вопрос</button>
                 </div>
                 
@@ -390,6 +428,7 @@
         ];
         
         let currentQuestionIndex = 0;
+        let loadedImagesCount = 0;
         
         // Инициализация игры
         document.addEventListener('DOMContentLoaded', function() {
@@ -439,6 +478,12 @@
             const photosContainer = document.getElementById('photos-container');
             photosContainer.innerHTML = '';
             
+            // Сбрасываем счетчик загруженных изображений
+            loadedImagesCount = 0;
+            document.getElementById('loaded-count').textContent = '0';
+            document.getElementById('loading-container').style.display = 'block';
+            document.getElementById('show-answer').disabled = true;
+            
             // Создаем элементы для фотографий
             for (let i = 0; i < question.photos.length; i++) {
                 const photoItem = document.createElement('div');
@@ -448,32 +493,69 @@
                 photoNumber.className = 'photo-number';
                 photoNumber.textContent = i + 1;
                 
+                // Создаем контейнер для загрузки
+                const loadingPlaceholder = document.createElement('div');
+                loadingPlaceholder.className = 'photo-placeholder';
+                
+                const spinner = document.createElement('div');
+                spinner.className = 'loading-spinner';
+                
+                const loadingText = document.createElement('div');
+                loadingText.textContent = 'Загрузка...';
+                
+                loadingPlaceholder.appendChild(spinner);
+                loadingPlaceholder.appendChild(loadingText);
+                
                 // Создаем изображение
-                const img = document.createElement('img');
-                img.src = question.photos[i];
+                const img = new Image();
+                img.className = 'loading';
                 img.alt = `Фото ${i+1}`;
                 
-                // Если изображение не загрузилось, показываем заглушку
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    const placeholder = document.createElement('div');
-                    placeholder.className = 'photo-placeholder';
-                    placeholder.textContent = `Фото ${question.photos[i]}`;
-                    photoItem.appendChild(placeholder);
+                // Обработчик успешной загрузки
+                img.onload = function() {
+                    this.classList.remove('loading');
+                    this.classList.add('loaded');
+                    loadingPlaceholder.style.display = 'none';
+                    this.style.display = 'block';
+                    imageLoaded();
                 };
                 
+                // Обработчик ошибки загрузки
+                img.onerror = function() {
+                    loadingPlaceholder.innerHTML = '❌ Ошибка загрузки';
+                    loadingPlaceholder.style.background = '#ffcdd2';
+                    imageLoaded();
+                };
+                
+                // Пытаемся загрузить изображение
+                setTimeout(() => {
+                    img.src = question.photos[i];
+                }, 100);
+                
                 photoItem.appendChild(photoNumber);
+                photoItem.appendChild(loadingPlaceholder);
                 photoItem.appendChild(img);
                 photosContainer.appendChild(photoItem);
             }
             
             // Скрываем ответ
             document.getElementById('answer-container').style.display = 'none';
-            document.getElementById('show-answer').disabled = false;
             document.getElementById('next-question').disabled = true;
             
             // Обновляем прогресс
             updateProgress();
+        }
+        
+        // Счетчик загруженных изображений
+        function imageLoaded() {
+            loadedImagesCount++;
+            document.getElementById('loaded-count').textContent = loadedImagesCount;
+            
+            // Если все изображения загружены
+            if (loadedImagesCount === 3) {
+                document.getElementById('loading-container').style.display = 'none';
+                document.getElementById('show-answer').disabled = false;
+            }
         }
         
         // Показать ответ
@@ -499,23 +581,28 @@
                 loadQuestion(currentQuestionIndex);
             } else {
                 // Игра завершена
-                const gameContainer = document.getElementById('game-container');
-                gameContainer.innerHTML = `
-                    <div class="completion-screen">
-                        <h2>🎉 Поздравляем! Вы завершили игру! 🎉</h2>
-                        <p>Вы нашли все связи между фотографиями!</p>
-                        <div class="all-answers">
-                            <h3>Все правильные ответы:</h3>
-                            ${gameData.map((question, index) => 
-                                `<div style="margin: 15px 0; text-align: left;">
-                                    <strong>${index + 1}. ${question.answer}</strong> - ${question.explanation}
-                                </div>`
-                            ).join('')}
-                        </div>
-                        <button class="my_button" onclick="location.reload()">Начать заново</button>
-                    </div>
-                `;
+                showCompletionScreen();
             }
+        }
+        
+        // Экран завершения
+        function showCompletionScreen() {
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.innerHTML = `
+                <div class="completion-screen">
+                    <h2>🎉 Поздравляем! Вы завершили игру! 🎉</h2>
+                    <p>Вы нашли все связи между фотографиями!</p>
+                    <div class="all-answers">
+                        <h3>Все правильные ответы:</h3>
+                        ${gameData.map((question, index) => 
+                            `<div style="margin: 15px 0; text-align: left;">
+                                <strong>${index + 1}. ${question.answer}</strong> - ${question.explanation}
+                            </div>`
+                        ).join('')}
+                    </div>
+                    <button class="my_button" onclick="location.reload()">Начать заново</button>
+                </div>
+            `;
         }
     </script>
 </body>
