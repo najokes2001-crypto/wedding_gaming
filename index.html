@@ -292,7 +292,7 @@
             <div class="instructions">
                 <h3>Как играть:</h3>
                 <ul>
-                    <li>Посмотрите на четыре фотографии и подумайте, что их объединяет</li>
+                    <li>Посмотрите на фотографии и подумайте, что их объединяет</li>
                     <li>Найдите общее выражение или словосочетание</li>
                     <li>Нажмите кнопку "Показать ответ", чтобы проверить свою догадку</li>
                     <li>Переходите к следующему вопросу, нажав "Следующий"</li>
@@ -301,7 +301,7 @@
             
             <div class="game-container" id="game-container">
                 <div class="photos-container" id="photos-container">
-                    <!-- 4 фотографии будут добавлены через JavaScript -->
+                    <!-- Фотографии будут добавлены через JavaScript -->
                 </div>
                 
                 <div class="controls">
@@ -323,55 +323,55 @@
     </div>
     
     <script>
-        // Данные игры: 10 вопросов с ЧЕТЫРЬМЯ фотографиями и правильными ответами
+        // Исправленные данные игры согласно вашему описанию
         const gameData = [
             {
-                photos: ["1.jpg", "2.jpg", "3.jpg", "4.jpg"],
+                photos: ["1.jpg", "2.jpg", "3.jpg", "40.jpg"],
                 answer: "Как рыба в воде",
                 explanation: "Чувствовать себя легко и уверенно"
             },
             {
-                photos: ["5.jpg", "6.jpg", "7.jpg", "8.jpg"],
+                photos: ["4.jpg", "5.jpg", "6.jpg"],
                 answer: "Мастер на все руки",
                 explanation: "Умеет делать всё"
             },
             {
-                photos: ["9.jpg", "10.jpg", "11.jpg", "12.jpg"],
+                photos: ["7.jpg", "8.jpg", "31.jpg", "32.jpg", "33.jpg"],
                 answer: "Душа компании",
                 explanation: "Тот, кто веселит всех вокруг"
             },
             {
-                photos: ["13.jpg", "14.jpg", "15.jpg", "16.jpg"],
+                photos: ["10.jpg", "34.jpg", "35.jpg"],
                 answer: "Яблоко от яблони недалеко падает",
                 explanation: "Похож на родителей"
             },
             {
-                photos: ["17.jpg", "18.jpg", "19.jpg", "20.jpg"],
+                photos: ["13.jpg", "36.jpg", "37.jpg", "38.jpg"],
                 answer: "Море по колено",
                 explanation: "Ничего не боится"
             },
             {
-                photos: ["21.jpg", "22.jpg", "23.jpg", "24.jpg"],
+                photos: ["16.jpg", "39.jpg"],
                 answer: "Витать в облаках",
                 explanation: "Мечтатель"
             },
             {
-                photos: ["25.jpg", "26.jpg", "27.jpg", "28.jpg"],
+                photos: ["18.jpg", "19.jpg", "20.jpg"],
                 answer: "Два сапога пара",
                 explanation: "Очень похожие люди"
             },
             {
-                photos: ["29.jpg", "30.jpg", "31.jpg", "32.jpg"],
+                photos: ["22.jpg", "23.jpg", "24.jpg"],
                 answer: "Не разлей вода",
                 explanation: "Очень дружные"
             },
             {
-                photos: ["33.jpg", "34.jpg", "35.jpg", "36.jpg"],
+                photos: ["24 (2).jpg", "25.jpg", "26.jpg", "27.jpg"],
                 answer: "С милым рай и в шалаше",
                 explanation: "Главное - быть вместе"
             },
             {
-                photos: ["37.jpg", "38.jpg", "39.jpg", "40.jpg"],
+                photos: ["28 (2).jpg", "28.jpg", "29.jpg", "30.jpg"],
                 answer: "С первого взгляда",
                 explanation: "Мгновенная симпатия"
             }
@@ -421,14 +421,14 @@
             document.getElementById('current-question').textContent = currentQuestionIndex + 1;
         }
         
-        // Загрузка вопроса с 4 фотографиями
+        // Загрузка вопроса с фотографиями
         function loadQuestion(index) {
             const question = gameData[index];
             const photosContainer = document.getElementById('photos-container');
             photosContainer.innerHTML = '';
             
-            // Создаем 4 элемента для фотографий
-            for (let i = 0; i < 4; i++) {
+            // Создаем элементы для фотографий
+            for (let i = 0; i < question.photos.length; i++) {
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
                 
@@ -454,8 +454,8 @@
                     placeholder.style.alignItems = 'center';
                     placeholder.style.justifyContent = 'center';
                     placeholder.style.background = 'linear-gradient(135deg, #' + 
-                        ['FF6B6B', '4ECDC4', '45B7D1', 'FFA726'][i] + ', #' + 
-                        ['FF5252', '26A69A', '1976D2', 'FB8C00'][i] + ')';
+                        ['FF6B6B', '4ECDC4', '45B7D1', 'FFA726', 'AB47BC'][i % 5] + ', #' + 
+                        ['FF5252', '26A69A', '1976D2', 'FB8C00', '8E24AA'][i % 5] + ')';
                     placeholder.style.color = 'white';
                     placeholder.style.fontSize = '20px';
                     placeholder.style.fontWeight = 'bold';
