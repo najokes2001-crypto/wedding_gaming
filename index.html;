@@ -94,21 +94,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s;
-        }
-        
-        .photo-item img.loading {
-            opacity: 0;
-        }
-        
-        .photo-item img.loaded {
-            opacity: 1;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .photo-number {
@@ -237,33 +226,6 @@
             z-index: 100;
         }
         
-        .photo-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #e0e0e0;
-            color: #777;
-            font-size: 24px;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #e91e63;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         .completion-screen {
             text-align: center;
             padding: 30px;
@@ -272,14 +234,6 @@
         .completion-screen h2 {
             color: #4caf50;
             margin-bottom: 20px;
-        }
-        
-        .loading-container {
-            display: none;
-            margin: 20px 0;
-            padding: 10px;
-            background: #e3f2fd;
-            border-radius: 10px;
         }
         
         @media (max-width: 768px) {
@@ -338,24 +292,20 @@
             <div class="instructions">
                 <h3>Как играть:</h3>
                 <ul>
-                    <li>Посмотрите на три фотографии и подумайте, что их объединяет</li>
+                    <li>Посмотрите на три изображения и подумайте, что их объединяет</li>
                     <li>Найдите общее выражение или словосочетание</li>
                     <li>Нажмите кнопку "Показать ответ", чтобы проверить свою догадку</li>
                     <li>Переходите к следующему вопросу, нажав "Следующий"</li>
                 </ul>
             </div>
             
-            <div class="loading-container" id="loading-container">
-                <p>Загрузка изображений... <span id="loaded-count">0</span>/3</p>
-            </div>
-            
             <div class="game-container" id="game-container">
                 <div class="photos-container" id="photos-container">
-                    <!-- Фотографии будут добавлены через JavaScript -->
+                    <!-- Изображения будут добавлены через JavaScript -->
                 </div>
                 
                 <div class="controls">
-                    <button class="my_button" id="show-answer" disabled>Показать ответ</button>
+                    <button class="my_button" id="show-answer">Показать ответ</button>
                     <button class="secondary_button" id="next-question" disabled>Следующий вопрос</button>
                 </div>
                 
@@ -373,62 +323,71 @@
     </div>
     
     <script>
-        // Данные игры: 10 вопросов с тремя фотографиями и правильными ответами
+        // Данные игры: 10 вопросов с цветными блоками и правильными ответами
         const gameData = [
             {
-                photos: ["1.jpg", "2.jpg", "3.jpg"],
-                answer: "Как рыба в воде",
-                explanation: "Чувствовать себя легко и уверенно"
+                colors: ["#FF6B6B", "#4ECDC4", "#45B7D1"],
+                texts: ["🔴 Красный", "🟢 Зеленый", "🔵 Синий"],
+                answer: "Основные цвета",
+                explanation: "Все три являются основными цветами в различных цветовых моделях"
             },
             {
-                photos: ["4.jpg", "5.jpg", "6.jpg"],
-                answer: "Мастер на все руки",
-                explanation: "Умеет делать всё"
+                colors: ["#FF9999", "#FFCC99", "#FFFF99"],
+                texts: ["🍎 Яблоко", "🍊 Апельсин", "🍋 Лимон"],
+                answer: "Фрукты",
+                explanation: "Все три изображения связаны с фруктами"
             },
             {
-                photos: ["7.jpg", "8.jpg", "9.jpg"],
-                answer: "Душа компании",
-                explanation: "Тот, кто веселит всех вокруг"
+                colors: ["#C9A0DC", "#A0D2DB", "#A0DCB3"],
+                texts: ["🌸 Весна", "☀️ Лето", "🍂 Осень"],
+                answer: "Времена года",
+                explanation: "Представлены три времени года (кроме зимы)"
             },
             {
-                photos: ["10.jpg", "11.jpg", "12.jpg"],
-                answer: "Яблоко от яблони недалеко падает",
-                explanation: "Похож на родителей"
+                colors: ["#FF5252", "#FF4081", "#E040FB"],
+                texts: ["❤️ Сердце", "💖 Любовь", "💜 Страсть"],
+                answer: "Чувства и эмоции",
+                explanation: "Все связаны с эмоциями и чувствами"
             },
             {
-                photos: ["13.jpg", "14.jpg", "15.jpg"],
-                answer: "Море по колено",
-                explanation: "Ничего не боится"
+                colors: ["#4CAF50", "#8BC34A", "#CDDC39"],
+                texts: ["🌳 Дерево", "🌿 Трава", "🍀 Клевер"],
+                answer: "Растительность",
+                explanation: "Все элементы относятся к растительному миру"
             },
             {
-                photos: ["16.jpg", "17.jpg", "18.jpg"],
-                answer: "Витать в облаках",
-                explanation: "Мечтатель"
+                colors: ["#2196F3", "#03A9F4", "#00BCD4"],
+                texts: ["💧 Вода", "🌊 Море", "💙 Небо"],
+                answer: "Водная стихия",
+                explanation: "Все ассоциируются с водой и небом"
             },
             {
-                photos: ["19.jpg", "20.jpg", "21.jpg"],
-                answer: "Два сапога пара",
-                explanation: "Очень похожие люди"
+                colors: ["#795548", "#5D4037", "#4E342E"],
+                texts: ["🪵 Дерево", "🍫 Шоколад", "☕ Кофе"],
+                answer: "Коричневые объекты",
+                explanation: "Все имеют коричневый цвет"
             },
             {
-                photos: ["22.jpg", "23.jpg", "24.jpg"],
-                answer: "Не разлей вода",
-                explanation: "Очень дружные"
+                colors: ["#9E9E9E", "#757575", "#616161"],
+                texts: ["☁️ Облако", "🪨 Камень", "⚙️ Механизм"],
+                answer: "Серые объекты",
+                explanation: "Все имеют серый цвет"
             },
             {
-                photos: ["25.jpg", "26.jpg", "27.jpg"],
-                answer: "С милым рай и в шалаше",
-                explanation: "Главное - быть вместе"
+                colors: ["#FF9800", "#FF5722", "#F44336"],
+                texts: ["🔥 Огонь", "🌅 Закат", "🍁 Осень"],
+                answer: "Теплые цвета",
+                explanation: "Все цвета относятся к теплой цветовой гамме"
             },
             {
-                photos: ["28.jpg", "29.jpg", "30.jpg"],
-                answer: "С первого взгляда",
-                explanation: "Мгновенная симпатия"
+                colors: ["#3F51B5", "#673AB7", "#9C27B0"],
+                texts: ["🌌 Ночь", "🔮 Магия", "👑 Королевство"],
+                answer: "Фиолетовые оттенки",
+                explanation: "Все цвета - различные оттенки фиолетового"
             }
         ];
         
         let currentQuestionIndex = 0;
-        let loadedImagesCount = 0;
         
         // Инициализация игры
         document.addEventListener('DOMContentLoaded', function() {
@@ -478,84 +437,40 @@
             const photosContainer = document.getElementById('photos-container');
             photosContainer.innerHTML = '';
             
-            // Сбрасываем счетчик загруженных изображений
-            loadedImagesCount = 0;
-            document.getElementById('loaded-count').textContent = '0';
-            document.getElementById('loading-container').style.display = 'block';
-            document.getElementById('show-answer').disabled = true;
-            
-            // Создаем элементы для фотографий
-            for (let i = 0; i < question.photos.length; i++) {
+            // Создаем элементы для цветных блоков
+            for (let i = 0; i < question.colors.length; i++) {
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
+                photoItem.style.background = `linear-gradient(135deg, ${question.colors[i]}, ${darkenColor(question.colors[i], 20)})`;
+                photoItem.textContent = question.texts[i];
                 
                 const photoNumber = document.createElement('div');
                 photoNumber.className = 'photo-number';
                 photoNumber.textContent = i + 1;
                 
-                // Создаем контейнер для загрузки
-                const loadingPlaceholder = document.createElement('div');
-                loadingPlaceholder.className = 'photo-placeholder';
-                
-                const spinner = document.createElement('div');
-                spinner.className = 'loading-spinner';
-                
-                const loadingText = document.createElement('div');
-                loadingText.textContent = 'Загрузка...';
-                
-                loadingPlaceholder.appendChild(spinner);
-                loadingPlaceholder.appendChild(loadingText);
-                
-                // Создаем изображение
-                const img = new Image();
-                img.className = 'loading';
-                img.alt = `Фото ${i+1}`;
-                
-                // Обработчик успешной загрузки
-                img.onload = function() {
-                    this.classList.remove('loading');
-                    this.classList.add('loaded');
-                    loadingPlaceholder.style.display = 'none';
-                    this.style.display = 'block';
-                    imageLoaded();
-                };
-                
-                // Обработчик ошибки загрузки
-                img.onerror = function() {
-                    loadingPlaceholder.innerHTML = '❌ Ошибка загрузки';
-                    loadingPlaceholder.style.background = '#ffcdd2';
-                    imageLoaded();
-                };
-                
-                // Пытаемся загрузить изображение
-                setTimeout(() => {
-                    img.src = question.photos[i];
-                }, 100);
-                
                 photoItem.appendChild(photoNumber);
-                photoItem.appendChild(loadingPlaceholder);
-                photoItem.appendChild(img);
                 photosContainer.appendChild(photoItem);
             }
             
             // Скрываем ответ
             document.getElementById('answer-container').style.display = 'none';
+            document.getElementById('show-answer').disabled = false;
             document.getElementById('next-question').disabled = true;
             
             // Обновляем прогресс
             updateProgress();
         }
         
-        // Счетчик загруженных изображений
-        function imageLoaded() {
-            loadedImagesCount++;
-            document.getElementById('loaded-count').textContent = loadedImagesCount;
-            
-            // Если все изображения загружены
-            if (loadedImagesCount === 3) {
-                document.getElementById('loading-container').style.display = 'none';
-                document.getElementById('show-answer').disabled = false;
-            }
+        // Функция для затемнения цвета
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
         }
         
         // Показать ответ
@@ -591,7 +506,7 @@
             gameContainer.innerHTML = `
                 <div class="completion-screen">
                     <h2>🎉 Поздравляем! Вы завершили игру! 🎉</h2>
-                    <p>Вы нашли все связи между фотографиями!</p>
+                    <p>Вы нашли все связи между изображениями!</p>
                     <div class="all-answers">
                         <h3>Все правильные ответы:</h3>
                         ${gameData.map((question, index) => 
