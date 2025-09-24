@@ -236,14 +236,6 @@
             margin-bottom: 20px;
         }
         
-        .file-naming {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        
         @media (max-width: 768px) {
             h1 {
                 font-size: 32px;
@@ -307,24 +299,6 @@
                 </ul>
             </div>
             
-            <div class="file-naming">
-                <h3>📁 Как назвать файлы изображений:</h3>
-                <p>Создайте папку <strong>images</strong> и разместите там картинки с именами:</p>
-                <ul>
-                    <li>Вопрос 1: <strong>1.jpg, 2.jpg, 3.jpg, 4.jpg</strong></li>
-                    <li>Вопрос 2: <strong>5.jpg, 6.jpg, 7.jpg, 8.jpg</strong></li>
-                    <li>Вопрос 3: <strong>9.jpg, 10.jpg, 11.jpg, 12.jpg</strong></li>
-                    <li>Вопрос 4: <strong>13.jpg, 14.jpg, 15.jpg, 16.jpg</strong></li>
-                    <li>Вопрос 5: <strong>17.jpg, 18.jpg, 19.jpg, 20.jpg</strong></li>
-                    <li>Вопрос 6: <strong>21.jpg, 22.jpg, 23.jpg, 24.jpg</strong></li>
-                    <li>Вопрос 7: <strong>25.jpg, 26.jpg, 27.jpg, 28.jpg</strong></li>
-                    <li>Вопрос 8: <strong>29.jpg, 30.jpg, 31.jpg, 32.jpg</strong></li>
-                    <li>Вопрос 9: <strong>33.jpg, 34.jpg, 35.jpg, 36.jpg</strong></li>
-                    <li>Вопрос 10: <strong>37.jpg, 38.jpg, 39.jpg, 40.jpg</strong></li>
-                </ul>
-                <p><strong>Всего нужно 40 изображений!</strong></p>
-            </div>
-            
             <div class="game-container" id="game-container">
                 <div class="photos-container" id="photos-container">
                     <!-- 4 фотографии будут добавлены через JavaScript -->
@@ -352,52 +326,52 @@
         // Данные игры: 10 вопросов с ЧЕТЫРЬМЯ фотографиями и правильными ответами
         const gameData = [
             {
-                photos: ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg"],
+                photos: ["1.jpg", "2.jpg", "3.jpg", "4.jpg"],
                 answer: "Как рыба в воде",
                 explanation: "Чувствовать себя легко и уверенно"
             },
             {
-                photos: ["images/5.jpg", "images/6.jpg", "images/7.jpg", "images/8.jpg"],
+                photos: ["5.jpg", "6.jpg", "7.jpg", "8.jpg"],
                 answer: "Мастер на все руки",
                 explanation: "Умеет делать всё"
             },
             {
-                photos: ["images/9.jpg", "images/10.jpg", "images/11.jpg", "images/12.jpg"],
+                photos: ["9.jpg", "10.jpg", "11.jpg", "12.jpg"],
                 answer: "Душа компании",
                 explanation: "Тот, кто веселит всех вокруг"
             },
             {
-                photos: ["images/13.jpg", "images/14.jpg", "images/15.jpg", "images/16.jpg"],
+                photos: ["13.jpg", "14.jpg", "15.jpg", "16.jpg"],
                 answer: "Яблоко от яблони недалеко падает",
                 explanation: "Похож на родителей"
             },
             {
-                photos: ["images/17.jpg", "images/18.jpg", "images/19.jpg", "images/20.jpg"],
+                photos: ["17.jpg", "18.jpg", "19.jpg", "20.jpg"],
                 answer: "Море по колено",
                 explanation: "Ничего не боится"
             },
             {
-                photos: ["images/21.jpg", "images/22.jpg", "images/23.jpg", "images/24.jpg"],
+                photos: ["21.jpg", "22.jpg", "23.jpg", "24.jpg"],
                 answer: "Витать в облаках",
                 explanation: "Мечтатель"
             },
             {
-                photos: ["images/25.jpg", "images/26.jpg", "images/27.jpg", "images/28.jpg"],
+                photos: ["25.jpg", "26.jpg", "27.jpg", "28.jpg"],
                 answer: "Два сапога пара",
                 explanation: "Очень похожие люди"
             },
             {
-                photos: ["images/29.jpg", "images/30.jpg", "images/31.jpg", "images/32.jpg"],
+                photos: ["29.jpg", "30.jpg", "31.jpg", "32.jpg"],
                 answer: "Не разлей вода",
                 explanation: "Очень дружные"
             },
             {
-                photos: ["images/33.jpg", "images/34.jpg", "images/35.jpg", "images/36.jpg"],
+                photos: ["33.jpg", "34.jpg", "35.jpg", "36.jpg"],
                 answer: "С милым рай и в шалаше",
                 explanation: "Главное - быть вместе"
             },
             {
-                photos: ["images/37.jpg", "images/38.jpg", "images/39.jpg", "images/40.jpg"],
+                photos: ["37.jpg", "38.jpg", "39.jpg", "40.jpg"],
                 answer: "С первого взгляда",
                 explanation: "Мгновенная симпатия"
             }
@@ -474,7 +448,6 @@
                 img.onerror = function() {
                     this.style.display = 'none';
                     const placeholder = document.createElement('div');
-                    placeholder.className = 'photo-placeholder';
                     placeholder.style.width = '100%';
                     placeholder.style.height = '100%';
                     placeholder.style.display = 'flex';
