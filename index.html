@@ -85,19 +85,21 @@
         
         .photo-item {
             width: 280px;
-            height: 280px;
+            min-height: 280px;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             position: relative;
             background: #f5f5f5;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             font-size: 24px;
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 10px;
         }
         
         .photo-number {
@@ -114,6 +116,15 @@
             justify-content: center;
             font-weight: bold;
             z-index: 2;
+        }
+        
+        .photo-image {
+            max-width: 100%;
+            max-height: 240px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
         }
         
         .controls {
@@ -236,6 +247,19 @@
             margin-bottom: 20px;
         }
         
+        .photo-placeholder {
+            width: 100%;
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            border-radius: 10px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 32px;
@@ -247,7 +271,15 @@
             
             .photo-item {
                 width: 220px;
-                height: 220px;
+                min-height: 240px;
+            }
+            
+            .photo-image {
+                max-height: 200px;
+            }
+            
+            .photo-placeholder {
+                height: 200px;
             }
             
             .my_button {
@@ -269,7 +301,15 @@
             .photo-item {
                 width: 100%;
                 max-width: 280px;
-                height: 220px;
+                min-height: 220px;
+            }
+            
+            .photo-image {
+                max-height: 180px;
+            }
+            
+            .photo-placeholder {
+                height: 180px;
             }
             
             .score-container {
@@ -440,27 +480,21 @@
                 const img = document.createElement('img');
                 img.src = question.photos[i];
                 img.alt = `Фото ${i+1}`;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
+                img.className = 'photo-image';
+                img.loading = 'lazy'; // Ленивая загрузка для оптимизации
                 
                 // Если изображение не загрузилось, показываем заглушку
                 img.onerror = function() {
                     this.style.display = 'none';
                     const placeholder = document.createElement('div');
-                    placeholder.style.width = '100%';
-                    placeholder.style.height = '100%';
-                    placeholder.style.display = 'flex';
-                    placeholder.style.alignItems = 'center';
-                    placeholder.style.justifyContent = 'center';
-                    placeholder.style.background = 'linear-gradient(135deg, #' + 
-                        ['FF6B6B', '4ECDC4', '45B7D1', 'FFA726', 'AB47BC'][i % 5] + ', #' + 
-                        ['FF5252', '26A69A', '1976D2', 'FB8C00', '8E24AA'][i % 5] + ')';
-                    placeholder.style.color = 'white';
-                    placeholder.style.fontSize = '20px';
-                    placeholder.style.fontWeight = 'bold';
+                    placeholder.className = 'photo-placeholder';
                     placeholder.textContent = `Фото ${i+1}`;
                     photoItem.appendChild(placeholder);
+                };
+                
+                // Когда изображение загружено, настраиваем его отображение
+                img.onload = function() {
+                    this.style.display = 'block';
                 };
                 
                 photoItem.appendChild(photoNumber);
